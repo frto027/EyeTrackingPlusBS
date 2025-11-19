@@ -19,6 +19,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -52,6 +56,10 @@
         <Reference Include="System.Core"/>
         <Reference Include="Unity.TextMeshPro">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Unity.XR.OpenXR" Publicize="true">
+            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.XR.OpenXR.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine">

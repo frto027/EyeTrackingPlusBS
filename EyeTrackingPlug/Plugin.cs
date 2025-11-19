@@ -1,5 +1,8 @@
-﻿using IPA;
+﻿using System.Linq;
+using IPA;
 using IPA.Loader;
+using UnityEngine.XR.OpenXR;
+using UnityEngine.XR.OpenXR.Features.Interactions;
 using IpaLogger = IPA.Logging.Logger;
 
 namespace EyeTrackingPlug;
@@ -23,6 +26,10 @@ internal class Plugin
     public void OnApplicationStart()
     {
         Log.Debug("OnApplicationStart");
+
+        OpenXRRestarter.Instance.onAfterShutdown += 
+            () => OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled = true;
+        OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
     }
 
     [OnExit]
