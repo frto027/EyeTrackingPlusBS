@@ -22,13 +22,19 @@ internal class Plugin
         Log.Info($"{pluginMetadata.Name} {pluginMetadata.HVersion} initialized.");
     }
 
+    private static void EyeGazeEnabler()
+    {
+        var profile = OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction));
+        profile.enabled = true;
+    }
+    
+    
     [OnStart]
     public void OnApplicationStart()
     {
         Log.Debug("OnApplicationStart");
 
-        OpenXRRestarter.Instance.onAfterShutdown += 
-            () => OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled = true;
+        OpenXRRestarter.Instance.onAfterShutdown += EyeGazeEnabler;
         OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
     }
 
@@ -36,5 +42,6 @@ internal class Plugin
     public void OnApplicationQuit()
     {
         Log.Debug("OnApplicationQuit");
+        OpenXRRestarter.Instance.onAfterShutdown -= EyeGazeEnabler;
     }
 }
