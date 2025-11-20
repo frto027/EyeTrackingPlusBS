@@ -11,15 +11,13 @@ namespace EyeTrackingPlug;
 internal class Plugin
 {
     internal static IpaLogger Log { get; private set; } = null!;
-
-    // Methods with [Init] are called when the plugin is first loaded by IPA.
-    // All the parameters are provided by IPA and are optional.
-    // The constructor is called before any method with [Init]. Only use [Init] with one constructor.
+    
     [Init]
     public Plugin(IpaLogger ipaLogger, PluginMetadata pluginMetadata)
     {
         Log = ipaLogger;
         Log.Info($"{pluginMetadata.Name} {pluginMetadata.HVersion} initialized.");
+        OpenXRRestarter.Instance.onAfterShutdown += EyeGazeEnabler;
     }
 
     private static void EyeGazeEnabler()
@@ -28,20 +26,21 @@ internal class Plugin
         profile.enabled = true;
     }
     
-    
     [OnStart]
     public void OnApplicationStart()
     {
         Log.Debug("OnApplicationStart");
 
-        OpenXRRestarter.Instance.onAfterShutdown += EyeGazeEnabler;
-        OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
+        if(OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled || OpenXRSettings.Instance.isRunning )
+            // Lucky. If other mods or something already does/doing the OpenXR restart, we don't need do it.
+        else
+            OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
     }
 
     [OnExit]
     public void OnApplicationQuit()
     {
         Log.Debug("OnApplicationQuit");
-        OpenXRRestarter.Instance.onAfterShutdown -= EyeGazeEnabler;
+        // OpenXRRestarter.Instance.onAfterShutdown -= EyeGazeEnabler;
     }
 }
