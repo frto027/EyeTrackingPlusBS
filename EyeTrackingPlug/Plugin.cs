@@ -32,7 +32,7 @@ internal class Plugin
         Log.Debug("OnApplicationStart");
 
         if(OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled || OpenXRSettings.Instance.isRunning )
-            // Lucky. If other mods or something already does/doing the OpenXR restart, we don't need do it.
+            // Lucky. If other mods or something did/doing the OpenXR restart, we don't need do it.
         else
             OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
     }
