@@ -45,20 +45,9 @@ etAgent                 - string(length + bytes), the mod ID and version number 
 eyeCloseCount           - int
 {                       - repeat eyeCloseCount times
     time                - float, timestamp
-    argCount            - byte
-    {                   - repeat argCount times
-        leftClose       - float
-        rightClose      - float
-    }
+    leftClose           - float
+    rightClose          - float
 }
-```
-
-```
-eventId:
-0 leftEyeClose          no args defined
-1 rightEyeClose         no args defined
-2 leftEyeOpen           no args defined
-3 rightEyeOpen          no args defined
 ```
 
 Always skip `eventArgSize` bytes, even if it is something like `leftEyeClose` which have no args defined.
