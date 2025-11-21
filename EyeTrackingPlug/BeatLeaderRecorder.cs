@@ -48,12 +48,19 @@ public class BeatLeaderRecorder : ITickable, IInitializable, IDisposable
         _recorder?.OnFinalizeReplay -= OnFinalizeReplay;
     }
 
+    private float _lastRecordedTime = 0;
     public void Tick()
     {
         if(!_recordEnabled)
             return;
+        if(_audioTimeSyncController.state != AudioTimeSyncController.State.Playing)
+            return;
+        // 30fps is enough. 24fps is good. 6fps is debug friendly.
+        if(_audioTimeSyncController.songTime - _lastRecordedTime < 1.0 / 6)
+            return;
         if (_eyeDataProvider!.GetData(out EyeTrackingData eyeTrackingData))
         {
+            _lastRecordedTime = _audioTimeSyncController.songTime;
             _records.Add(new  RecordedEyeTrackingData()
             {
                 SongTime = _audioTimeSyncController.songTime,
