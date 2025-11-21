@@ -2,18 +2,9 @@
 using BeatLeader.Models;
 using BeatLeader.Replayer;
 using IPA.Loader;
-using SiraUtil.Zenject;
 using Zenject;
 
 namespace EyeTrackingPlug.DataProvider;
-
-public class RecordOrUnityDataProviderInstaller : Installer<RecordOrUnityDataProviderInstaller>
-{
-    public override void InstallBindings()
-    {
-        Container.Bind<RecordOrUnityDataProvider>().To<RecordOrUnityDataProvider>().AsSingle();
-    }
-}
 
 public class RecordOrUnityDataProvider:IEyeDataProvider, IInitializable, IDisposable
 {
@@ -34,6 +25,7 @@ public class RecordOrUnityDataProvider:IEyeDataProvider, IInitializable, IDispos
     public void Initialize()
     {
         Instance = this;
+        Plugin.Log.Info("RecordOrUnityDataProvider initializing...");
         if (PluginManager.IsEnabled(PluginManager.GetPluginFromId("BeatLeader")))
             InitBeatLeader();
     }

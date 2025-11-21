@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using EyeTrackingPlug.BeatLeaderRecorder;
 using EyeTrackingPlug.DataProvider;
 using IPA;
 using IPA.Loader;
@@ -27,13 +28,13 @@ internal class Plugin
         // If other mods also require a restart, then why not do them together later?
         
         zenjector.UseLogger(ipaLogger);
-
-        zenjector.Install<UnityEyeDataProviderInstaller>(Location.App);
-        zenjector.Install<RecordOrUnityDataProviderInstaller>(Location.App);
         
-        zenjector.Install<ReplayDataProviderInstaller>(Location.Player);
+        zenjector.Install<AppInstaller>(Location.App);
+        zenjector.Install<SinglePlayerInstaller>(Location.Singleplayer);
         
-        EtAgent = $"{pluginMetadata.Name}/{pluginMetadata.HVersion} ({OpenXRRuntime.LibraryName},{OpenXRRuntime.name}/{OpenXRRuntime.version}/{OpenXRRuntime.pluginVersion}/{OpenXRRuntime.apiVersion})";
+        BeatLeaderRecorderInstaller.PluginInit(zenjector);
+        
+        EtAgent = $"{pluginMetadata.Name}/{pluginMetadata.HVersion} ({OpenXRRuntime.LibraryName},{OpenXRRuntime.name}/{OpenXRRuntime.version}/{OpenXRRuntime.apiVersion}/{OpenXRRuntime.pluginVersion})";
         
         Log.Info($"{pluginMetadata.Name} {pluginMetadata.HVersion} initialized, etAgent: {EtAgent}");
     }
@@ -47,7 +48,7 @@ internal class Plugin
     [OnStart]
     public void OnApplicationStart()
     {
-        Log.Debug("OnApplicationStart");
+        Log.Info("OnApplicationStart");
 
         if (OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled ||
             OpenXRRestarter.Instance.isRunning)
@@ -59,11 +60,9 @@ internal class Plugin
             OpenXRRestarter.Instance.PauseAndShutdownAndRestart();
         }
     }
-
     [OnExit]
-    public void OnApplicationQuit()
+    public void OnApplicationExit()
     {
-        Log.Debug("OnApplicationQuit");
-        // OpenXRRestarter.Instance.onAfterShutdown -= EyeGazeEnabler;
+        
     }
 }

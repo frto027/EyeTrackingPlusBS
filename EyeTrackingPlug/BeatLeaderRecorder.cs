@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BeatLeader;
-using BeatLeader.Models.Replay;
 using EyeTrackingPlug.DataProvider;
 using IPA.Loader;
 using SiraUtil.Zenject;
@@ -16,11 +15,19 @@ public class BeatLeaderRecorderInstaller : Installer
     public static void PluginInit(Zenjector zenjector)
     {
         if (PluginManager.IsEnabled(PluginManager.GetPluginFromId("BeatLeader")))
+        {
             zenjector.Install<BeatLeaderRecorderInstaller>(Location.Singleplayer);
+            Plugin.Log.Info("BeatLeaderRecorder installed");
+        }
+        else
+        {
+            Plugin.Log.Info("BeatLeader is not detected. Recorder not enabled.");
+        }
     }
     public override void InstallBindings()
     {
-        Container.Bind<BeatLeaderRecorder>().AsSingle();
+        Container.Bind(typeof(BeatLeaderRecorder), typeof(ITickable), typeof(IInitializable), typeof(IDisposable))
+            .To<BeatLeaderRecorder>().AsSingle();
     }
 
 }
@@ -33,11 +40,11 @@ struct RecordedEyeTrackingData
 
 public class BeatLeaderRecorder : ITickable, IInitializable, IDisposable
 {
-    [Inject]
+    [InjectOptional]
     private readonly ReplayRecorder? _recorder = null!;
 
     [Inject]
-    private readonly UnityEyeDataProvider? _eyeDataProvider = null!;
+    private readonly UnityEyeDataProvider _eyeDataProvider = null!;
     
     [Inject]
     private readonly AudioTimeSyncController _audioTimeSyncController = null!;
@@ -54,7 +61,7 @@ public class BeatLeaderRecorder : ITickable, IInitializable, IDisposable
         
         _recorder?.OnFinalizeReplay += OnFinalizeReplay;
         
-        Plugin.Log.Debug($"Initializing Eye DataProvider, _recordEnabled: {_recordEnabled}");
+        Plugin.Log.Info($"Initializing BeatLeaderRecorder, _recordEnabled: {_recordEnabled}");
 
     }
     public void Dispose()
@@ -81,6 +88,11 @@ public class BeatLeaderRecorder : ITickable, IInitializable, IDisposable
     {
         if(!_recordEnabled)
             return;
+        if (_records.Count == 0)
+        {
+            Plugin.Log.Info("Zero data recorded, don't save the eye tracking data.");
+            return;
+        }
         using var memoryStream = new MemoryStream();
         using var binaryWriter = new BinaryWriter(memoryStream, Encoding.ASCII, true);
 
@@ -108,7 +120,7 @@ public class BeatLeaderRecorder : ITickable, IInitializable, IDisposable
         
         var customDataBytes = memoryStream.ToArray();
         
-        Plugin.Log.Notice($"Recorded {customDataBytes.Length} bytes(not recorded for debug purpose)");
-        //recorder.TryWriteCustomData("EyeTrackingR", memoryStream.ToArray());
+        Plugin.Log.Notice($"Recorded {customDataBytes.Length} bytes. {_records.Count} data recorded. (not recorded for debug purpose)");
+        // recorder.TryWriteCustomData("EyeTrackingR", memoryStream.ToArray());
     }
 }

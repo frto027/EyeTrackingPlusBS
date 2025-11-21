@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using BeatLeader.Replayer;
 using UnityEngine;
 using Zenject;
 
 namespace EyeTrackingPlug.DataProvider;
 
-public class ReplayDataProviderInstaller : Installer<ReplayDataProviderInstaller>
-{
-    public override void InstallBindings()
-    {
-        Container.Bind<ReplayDataProvider>().AsSingle();
-    }
-}
 
 struct ReplayData
 {
@@ -33,12 +24,13 @@ public class ReplayDataProvider:IEyeDataProvider, IInitializable, IDisposable
     [Inject]
     private AudioTimeSyncController _audioTimeSyncController = null!;
 
-    [Inject] 
+    [Inject]
     private RecordOrUnityDataProvider _recordOrUnityDataProvider = null!;
     
     
     private ReplayData[]? _datas;
-
+    
+    
     public void LoadData()
     {
         try
@@ -154,12 +146,14 @@ public class ReplayDataProvider:IEyeDataProvider, IInitializable, IDisposable
 
     public void Initialize()
     {
+        Plugin.Log.Debug("Replay Data Provider Initialized");
         LoadData();
         _recordOrUnityDataProvider.replayProvider = this;
     }
 
     public void Dispose()
     {
+        Plugin.Log.Debug("Replay Data Provider Disposed");
         _recordOrUnityDataProvider.replayProvider = null;
     }
 }

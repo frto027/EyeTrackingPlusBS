@@ -7,13 +7,6 @@ using Zenject;
 
 namespace EyeTrackingPlug.DataProvider;
 
-public class UnityEyeDataProviderInstaller : Installer<UnityEyeDataProviderInstaller>
-{
-    public override void InstallBindings()
-    {
-        Container.Bind<UnityEyeDataProvider>().AsSingle();
-    }
-}
 
 public class UnityEyeDataProvider: IEyeDataProvider, IInitializable, IDisposable
 {
@@ -51,9 +44,12 @@ public class UnityEyeDataProvider: IEyeDataProvider, IInitializable, IDisposable
     public bool GetData(out EyeTrackingData data)
     {
         data = new EyeTrackingData();
+        Plugin.Log.Info(_devices.Count + " eye tracking data found.");
         if (_devices.Count == 0)
             return false;
         var device = _devices[0];
+        
+        Plugin.Log.Info(device.name);
         if(!device.TryGetFeatureValue(CommonUsages.eyesData, out Eyes eyes))
             return false;
         
