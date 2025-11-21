@@ -28,7 +28,6 @@ public class ReplayDataParseException : Exception
     }
 }
 
-// this class is not initialized by zenject
 public class ReplayDataProvider:IEyeDataProvider, IInitializable, IDisposable
 {
     [Inject]
