@@ -11,7 +11,7 @@ Maybe it will not work. Just an idea fram the unreleased steam frame. Let's code
 - [ ] Buy a headset that supports eye tracking???
 - [ ] Release the first version of this mod.
 - [ ] Display the eye area in `Camera 2` mod ~~with two spot light~~.
-- [ ] Replay support.
+- [x] Replay support.
 - [ ] Release the seconed version of this mod.
 
 
