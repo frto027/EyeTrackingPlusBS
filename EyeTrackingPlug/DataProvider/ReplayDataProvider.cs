@@ -145,14 +145,12 @@ public class ReplayDataProvider:IEyeDataProvider, IInitializable, IDisposable
 
     public void Initialize()
     {
-        Plugin.Log.Debug("Replay Data Provider Initialized");
         LoadData();
         _replayOrUnityDataProvider.replayProvider = this;
     }
 
     public void Dispose()
     {
-        Plugin.Log.Debug("Replay Data Provider Disposed");
         _replayOrUnityDataProvider.replayProvider = null;
     }
 }

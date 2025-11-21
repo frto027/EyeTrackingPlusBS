@@ -50,7 +50,7 @@ internal class Plugin
     [OnStart]
     public void OnApplicationStart()
     {
-        Log.Info("OnApplicationStart");
+        Log.Debug("OnApplicationStart");
 
         if (OpenXRSettings.Instance.features.First((f => f is EyeGazeInteraction)).enabled ||
             OpenXRRestarter.Instance.isRunning)

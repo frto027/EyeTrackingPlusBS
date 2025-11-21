@@ -46,7 +46,6 @@ public class UnityEyeDataProvider: IEyeDataProvider, IInitializable, IDisposable
     public bool GetData(out EyeTrackingData data)
     {
         data = new EyeTrackingData();
-        Plugin.Log.Info(_devices.Count + " eye tracking data found.");
         if (_devices.Count == 0)
             return false;
         var device = _devices[0];

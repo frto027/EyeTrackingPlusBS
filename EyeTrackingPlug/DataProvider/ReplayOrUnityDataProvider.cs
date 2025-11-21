@@ -29,7 +29,6 @@ public class ReplayOrUnityDataProvider: IEyeDataProvider, IInitializable, IDispo
     public void Initialize()
     {
         Instance = this;
-        Plugin.Log.Info("RecordOrUnityDataProvider initializing...");
         if (PluginManager.IsEnabled(PluginManager.GetPluginFromId("BeatLeader")))
             InitBeatLeader();
     }
