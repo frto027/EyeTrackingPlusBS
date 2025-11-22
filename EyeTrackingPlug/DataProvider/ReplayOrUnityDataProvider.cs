@@ -7,9 +7,9 @@ namespace EyeTrackingPlug.DataProvider;
 public class ReplayOrUnityDataProvider: IEyeDataProvider
 {
     [Inject]
-    internal UnityEyeDataProvider _eyeDataProvider = null!;
+    private UnityEyeDataProvider _eyeDataProvider = null!;
 
-    public BeatLeaderReplayDataProvider? blReplayProvider = null;
+    internal BeatLeaderReplayDataProvider? blReplayProvider = null;
     
     [PublicAPI]
     public bool IsReplayData => blReplayProvider != null && blReplayProvider.HasData();
