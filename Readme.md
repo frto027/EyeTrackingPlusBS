@@ -56,3 +56,22 @@ Always skip `eventArgSize` bytes, even if it is something like `leftEyeClose` wh
 if you see unknown event Id, just ignore them and skip the `args`.
 
 In the future the event maybe reloaded with different arguments.
+
+# API
+
+```csharp
+class YourClass 
+{
+    [Inject]
+    private readonly IEyeDataProvider _dataProvider;
+    
+    [Inject]
+    private readonly ReplayOrRawEyeDataProvider _replayOrRawEyeDataProvider;
+}
+
+```
+
+`IEyeDataProvider` returns the raw data from the player selected data source.
+
+`ReplayOrRawEyeDataProvider` will return replay data if current is in replay mode. Or returns raw data if not in replay.
+

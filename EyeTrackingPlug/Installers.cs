@@ -11,13 +11,13 @@ public class AppInstaller : Installer<AppInstaller>
     {
         // There are two data sources.
         
-        // the first is UnityEyeDataProvider, which reads eye tracking data from unity directly.
+        // the first is IEyeDataProvider, which reads eye tracking data from unity directly.
         // use this if you want to interact with game UI.
+        Container.Bind<IEyeDataProvider>().To<UnityEyeDataProvider>().FromResolve();
         Container.BindInterfacesAndSelfTo<UnityEyeDataProvider>().AsSingle();
-        
-        // the seconed is RecordOrUnityDataProvider, which reads eye tracking data not only fron unity, but also the replay file of beatleader if avaliable.
+        // the seconed is ReplayOrRawEyeDataProvider, which reads eye tracking data not only fron unity, but also the replay file of beatleader if avaliable.
         // use this if you want display some eye related information in game.
-        Container.BindInterfacesAndSelfTo<ReplayOrUnityDataProvider>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ReplayOrRawEyeDataProvider>().AsSingle();
     }
 }
 

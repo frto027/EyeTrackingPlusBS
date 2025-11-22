@@ -4,10 +4,10 @@ using Zenject;
 
 namespace EyeTrackingPlug.DataProvider;
 
-public class ReplayOrUnityDataProvider: IEyeDataProvider
+public class ReplayOrRawEyeDataProvider: IEyeDataProvider
 {
     [Inject]
-    private UnityEyeDataProvider _eyeDataProvider = null!;
+    private IEyeDataProvider _eyeDataProvider = null!;
 
     internal BeatLeaderReplayDataProvider? blReplayProvider = null;
     
